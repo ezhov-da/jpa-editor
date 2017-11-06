@@ -4,29 +4,37 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextarea.RTextScrollPane;
 import ru.ezhov.engine.Engine;
+import ru.ezhov.engine.Groovy;
 import ru.ezhov.engine.ScriptLoader;
 
+import javax.annotation.PostConstruct;
 import javax.imageio.ImageIO;
+import javax.inject.Inject;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
+
 public class BasicFrame extends JFrame {
 
-    private RSyntaxTextArea textAreaCode;
-    private RSyntaxTextArea textAreaLog;
+
+    @Inject
+    @Groovy
+    private Engine<String, String> engine;
+
+    @Inject
+    private PanelEditor panelEditor;
+
+    @Inject
+    private PanelLog panelLog;
+
     private JButton buttonOpenScriptExample;
     private JButton buttonExecuteScript;
 
-    private Engine<String, String> engine;
 
-    public BasicFrame(Engine<String, String> engine) {
-        this.engine = engine;
-        init();
-    }
-
+    @PostConstruct
     private void init() {
 
 
@@ -39,8 +47,8 @@ public class BasicFrame extends JFrame {
         add(new PanelButton(), BorderLayout.NORTH);
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-        splitPane.setTopComponent(new PanelEditor());
-        splitPane.setBottomComponent(new PanelLog());
+        splitPane.setTopComponent(panelEditor);
+        splitPane.setBottomComponent(panelLog);
 
         add(splitPane, BorderLayout.CENTER);
 
@@ -51,21 +59,8 @@ public class BasicFrame extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 
-        setSize(800, 600);
+        setSize(1000, 800);
         setLocationRelativeTo(null);
-    }
-
-    private class PanelEditor extends JPanel {
-
-        public PanelEditor() {
-            setLayout(new BorderLayout());
-
-            textAreaCode = new RSyntaxTextArea(20, 60);
-            textAreaCode.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
-            textAreaCode.setCodeFoldingEnabled(true);
-            RTextScrollPane sp = new RTextScrollPane(textAreaCode);
-            add(sp);
-        }
     }
 
     private class PanelButton extends JPanel {
@@ -75,7 +70,7 @@ public class BasicFrame extends JFrame {
 
             buttonOpenScriptExample.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    textAreaCode.setText(new ScriptLoader().loadScript());
+                    panelEditor.reloadScript();
                 }
 
             });
@@ -84,8 +79,8 @@ public class BasicFrame extends JFrame {
             buttonExecuteScript.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     try {
-                        String val = engine.execute(textAreaCode.getText());
-                        textAreaLog.setText(val);
+                        String val = engine.execute(panelEditor.getScriptForExecute());
+                        panelLog.setResult(val);
                     } catch (Throwable throwable) {
                         throwable.printStackTrace();
                         JOptionPane.showMessageDialog(
@@ -100,19 +95,6 @@ public class BasicFrame extends JFrame {
             add(buttonOpenScriptExample);
             add(buttonExecuteScript);
 
-        }
-    }
-
-    private class PanelLog extends JPanel {
-
-        public PanelLog() {
-            setLayout(new BorderLayout());
-
-            textAreaLog = new RSyntaxTextArea(20, 60);
-            textAreaLog.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
-            textAreaLog.setCodeFoldingEnabled(true);
-            RTextScrollPane sp = new RTextScrollPane(textAreaLog);
-            add(sp);
         }
     }
 }
