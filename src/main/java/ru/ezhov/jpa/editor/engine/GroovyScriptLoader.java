@@ -3,7 +3,7 @@ package ru.ezhov.jpa.editor.engine;
 import java.util.Scanner;
 
 public class GroovyScriptLoader implements ScriptLoader {
-    private static final String SCRIPT_FULL = "/script/example-script-full.groovy.txt";
+    private static final String SCRIPT_FULL = "/script/example-script-full.groovy.groovy";
 
     public String script() {
         return loadScript(SCRIPT_FULL);

@@ -1,3 +1,5 @@
+import com.fasterxml.jackson.databind.ObjectMapper
+
 import javax.persistence.Persistence
 import javax.persistence.EntityManager
 import javax.persistence.EntityManagerFactory
@@ -22,11 +24,18 @@ try {
 
     // you can edit this part >>>
 
+    entityManager.transaction.begin()
+
     List<Customer> customerList =
-            entityManager.createQuery("SELECT c FROM Customer c").getResultList()
+            entityManager.createQuery("""
+                SELECT 
+                    c
+                FROM Customer c
+                """).getResultList()
+
+    entityManager.transaction.commit()
 
     return customerList
-
     // <<< end part
 } finally {
     if (entityManager != null) {

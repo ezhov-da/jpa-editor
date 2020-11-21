@@ -1,5 +1,6 @@
 package ru.ezhov.jpa.editor.gui;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.ezhov.jpa.editor.engine.Engine;
 import ru.ezhov.jpa.editor.engine.ScriptLoader;
 
@@ -64,6 +65,12 @@ public class BasicFrame extends JFrame {
                 SwingUtilities.invokeLater(() -> {
                     try {
                         String val = engine.execute(panelEditor.getScriptForExecute());
+
+
+
+
+
+
                         panelLog.setResult(val);
                     } catch (Throwable throwable) {
                         throwable.printStackTrace();

@@ -1,9 +1,7 @@
 package ru.ezhov.jpa.editor.domain.model;
 
-import org.h2.tools.Server;
 import org.junit.After;
 import org.junit.AfterClass;
-import static org.junit.Assert.assertFalse;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -16,6 +14,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.util.List;
+
+import static org.junit.Assert.assertFalse;
 
 public class ProductTest {
     private static final Logger LOG = LoggerFactory.getLogger(OrderItemTest.class.getName());

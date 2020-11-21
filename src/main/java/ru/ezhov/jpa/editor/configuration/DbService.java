@@ -9,7 +9,7 @@ import java.io.InputStream;
 
 public class DbService {
     private static final Logger LOG = LoggerFactory.getLogger(DbService.class);
-    private static final String APPLICATION_DIRECTORY = System.getProperty("user.home") + File.separator + ".jpa-editor";
+    private static final String APPLICATION_DIRECTORY = System.getProperty("user.home") + File.separator + ".ru.ezhov.jpa-editor";
 
     public void copyDbToUser() throws DbServiceException {
         final File directory = new File(APPLICATION_DIRECTORY);
